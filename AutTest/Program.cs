@@ -13,10 +13,66 @@ namespace AutTest
 {
     class Program
     {
+        private String _MainMenuWindName = "";
+
         [DllImport("user32", EntryPoint = "FindWindow", CharSet = CharSet.Auto)]
         static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
-    
+        [DllImport("user32", EntryPoint = "FindWindowEx", CharSet = CharSet.Auto)]
+        static extern IntPtr FindWindowEx(IntPtr hwndParent,IntPtr hwndChildAfter,string lpzClass, string lpzWindow);
+
+        [DllImport("user32", EntryPoint = "GetWindowText", CharSet = CharSet.Auto)]
+        static extern bool GetWindowText(IntPtr hWnd, string lpString, int nMaxcount);
+
+        [DllImport("user32", EntryPoint = "PostMessage", CharSet = CharSet.Auto)]
+        static extern bool PostMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
+
+        uint WM_LBUTTONDOWN = 0x0201;
+        uint WM_LBUTTONUP = 0x202;
+
+        private void ExecuteCommand(String command, string[] args, IntPtr mwh) 
+        {
+            switch (command)
+            {   
+                case "NAVTO":
+                    if (args[0].Equals("FORM")) 
+                    {
+                        string wText = null; 
+                        GetWindowText(mwh,wText,_MainMenuWindName.Length);
+                        if (wText.Equals(_MainMenuWindName))
+                        {
+                            IntPtr frmCtrWH = FindWindowByIndex(mwh,int.Parse(args[1]));
+                        }
+                    }
+                    else if (args[0].Equals("TAB"))
+                    {
+                    }
+                break;
+                case "Click":
+
+                default:
+                    break;
+            }
+        }
+
+        private IntPtr FindWindowByIndex(IntPtr hwndParent, int index) 
+        {
+            if (index == 0)
+            {
+                return hwndParent;
+            }
+            else 
+            {
+                int ct = 0;
+                IntPtr result = IntPtr.Zero;
+                do
+                {
+                    result = FindWindowEx(hwndParent, result, null, null);
+                } while (ct < index && result != IntPtr.Zero);
+                return result;
+            }
+
+        }
 
         static void Main(string[] args)
         {
@@ -60,6 +116,13 @@ namespace AutTest
 
                 if (mwh == IntPtr.Zero)
                     throw new Exception("Could not find main window");
+                else 
+                {
+                    switch ()
+                    {
+                    }
+                
+                }
             
             }catch(Exception ex)
             {
